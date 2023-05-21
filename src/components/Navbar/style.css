@@ -1,0 +1,33 @@
+nav {
+  background-color: var(--mainColor);
+  height: 80px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+}
+
+.logo {
+  color: #fff;
+}
+
+.cart_icon {
+  cursor: pointer;
+}
+
+.cart_counter {
+  background-color: #fff;
+  color: var(--mainColor);
+  border: 1px solid var(--mainColor);
+  padding: 2px 6px;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
