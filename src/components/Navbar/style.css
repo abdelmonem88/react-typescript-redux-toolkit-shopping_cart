@@ -8,6 +8,11 @@ nav {
   font-size: 1.2rem;
 }
 
+nav a {
+  color: #fff;
+  text-decoration: none;
+}
+
 .logo {
   color: #fff;
 }

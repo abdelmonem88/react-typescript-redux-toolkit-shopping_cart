@@ -9,30 +9,35 @@ type Props = {};
 
 const Home = (props: Props) => {
   const dispatch = useAppDispatch();
-  const fetchedProducts = useAppSelector((state) => state.products.products);
-  console.log(fetchedProducts);
+  const { products, loading } = useAppSelector((state) => state.products);
 
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
+
   return (
-    <Layout>
+    <Layout pagetitle="All Products">
       <div
         style={{
           minHeight: "calc(100vh - 160px)",
         }}
       >
-        <h1
-          style={{
-            textAlign: "center",
-            margin: "20px 0",
-            fontSize: "3rem",
-            color: "var(--mainColor)",
-          }}
-        >
-          All Products
-        </h1>
-        <Products products={fetchedProducts} />
+        {loading ? (
+          <h1
+            style={{
+              textAlign: "center",
+              margin: "20px 0",
+              fontSize: "3rem",
+              color: "var(--mainColor)",
+            }}
+          >
+            Loading...
+          </h1>
+        ) : (
+          <>
+            <Products products={products} />
+          </>
+        )}
       </div>
     </Layout>
   );
