@@ -6,11 +6,15 @@ import { fetchProducts } from "../products/productsThunk";
 export interface cartState {
   allProducts: Product[];
   cartProducts: Product[];
+  cartTotalAmount: number;
+  cartTotalPrice: number;
 }
 
 const initialState: cartState = {
   allProducts: [],
   cartProducts: [],
+  cartTotalAmount: 0,
+  cartTotalPrice: 0,
 };
 
 const cartSlice = createSlice({
@@ -18,20 +22,74 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addProductToCart: (state, action) => {
-      // if (state.cartProducts.length === 0) {
-      //   const product = state.allProducts.find(
-      //     (product) => product.id === action.payload
-      //   );
-      //   product!.amount += 1;
-      //   if (product) {
-      //     state.cartProducts.push(product);
-      //   }
-      // } else {
-      //   const product = state.cartProducts.find(
-      //     (product) => product.id === action.payload
-      //   );
-      //   product!.amount += 1;
-      // }
+      // get the product from the allProducts array
+      const product = state.allProducts.find(
+        (product) => product.id === action.payload
+      );
+      // check if the product is already in the cart
+      const productInCart = state.cartProducts.find(
+        (product) => product.id === action.payload
+      );
+      if (productInCart) {
+        state.cartProducts = state.cartProducts.map((product) =>
+          product.id === action.payload
+            ? { ...product, amount: product.amount + 1 }
+            : product
+        );
+      } else {
+        state.cartProducts = [
+          ...state.cartProducts,
+          { ...product, amount: 1 } as Product,
+        ];
+      }
+    },
+    increaseAmount: (state, action) => {
+      state.cartProducts = state.cartProducts.map((product) =>
+        product.id === action.payload
+          ? { ...product, amount: product.amount + 1 }
+          : product
+      );
+    },
+    decreaseAmount: (state, action) => {
+      // check if the amount is 1
+      const product = state.cartProducts.find(
+        (product) => product.id === action.payload
+      );
+      if (product?.amount === 1) {
+        state.cartProducts = state.cartProducts.filter(
+          (product) => product.id !== action.payload
+        );
+      } else {
+        state.cartProducts = state.cartProducts.map((product) =>
+          product.id === action.payload
+            ? { ...product, amount: product.amount - 1 }
+            : product
+        );
+      }
+    },
+    removeItem: (state, action) => {
+      state.cartProducts = state.cartProducts.filter((product) => {
+        return product.id !== action.payload;
+      });
+    },
+    removeAllItems: (state) => {
+      state.cartProducts = [];
+    },
+    getTotals: (state) => {
+      const { totalAmount, totalPrice } = state.cartProducts.reduce(
+        (total, product) => {
+          const { amount, price } = product;
+          total.totalAmount += amount;
+          total.totalPrice += amount * price;
+          return total;
+        },
+        {
+          totalAmount: 0,
+          totalPrice: 0,
+        }
+      );
+      state.cartTotalAmount = totalAmount;
+      state.cartTotalPrice = totalPrice.toFixed(2) as unknown as number;
     },
   },
   extraReducers: (builder) => {
@@ -47,4 +105,11 @@ const cartSlice = createSlice({
 });
 
 export default cartSlice.reducer;
-export const { addProductToCart } = cartSlice.actions;
+export const {
+  addProductToCart,
+  increaseAmount,
+  decreaseAmount,
+  removeItem,
+  removeAllItems,
+  getTotals,
+} = cartSlice.actions;

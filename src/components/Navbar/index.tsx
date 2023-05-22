@@ -1,11 +1,23 @@
+import { useEffect } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { getTotals } from "../../store/featurs/cart/cartSlice";
 import "./style.css";
 
 type Props = {};
 
 const Navbar = (props: Props) => {
+  const dispatch = useAppDispatch();
+  const { cartProducts, cartTotalAmount } = useAppSelector(
+    (state) => state.cart
+  );
+
+  useEffect(() => {
+    dispatch(getTotals());
+  }, [dispatch, cartProducts]);
+
   return (
     <nav>
       <Link to="/">
@@ -22,7 +34,7 @@ const Navbar = (props: Props) => {
               color: "white",
             }}
           />
-          <span className="cart_counter">0</span>
+          <span className="cart_counter">{cartTotalAmount}</span>
         </div>
       </Link>
     </nav>

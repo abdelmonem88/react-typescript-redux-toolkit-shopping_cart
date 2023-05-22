@@ -33,7 +33,7 @@ const Products = (props: Props) => {
               className="btn btn-outline-primary"
               onClick={() => {
                 dispatch(addProductToCart(product.id));
-                navigate("/cart");
+                // navigate("/cart");
               }}
             >
               Add to cart
