@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { fetchProducts } from "./productsThunk";
-import { RootState } from "../../index";
 
 export interface Product {
   id: string;

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
 import { Product } from "../products/productsSlice";
 import { fetchProducts } from "../products/productsThunk";
@@ -36,11 +37,13 @@ const cartSlice = createSlice({
             ? { ...product, amount: product.amount + 1 }
             : product
         );
+        toast.info("Product amount increased by 1");
       } else {
         state.cartProducts = [
           ...state.cartProducts,
           { ...product, amount: 1 } as Product,
         ];
+        toast.success("Product added to cart");
       }
     },
     increaseAmount: (state, action) => {
